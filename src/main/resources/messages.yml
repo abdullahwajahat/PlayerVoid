@@ -1,0 +1,39 @@
+# Color codes supported with &: &a &c etc.
+prefix: "&6[VoidManager]&r "
+
+no-permission: "&cYou don't have permission."
+player-only: "&cOnly players can use this command."
+unknown-subcommand: "&cUnknown subcommand. Use /void for help."
+usage:
+  base: "&eUsage: /void <create|edit|remove|list|info|toggle|pos1|pos2|bypass|reload>"
+  create-pos: "&eUsage: /void create <name> <fallY> <tpX> <tpY> <tpZ> [yaw] [pitch] [message]"
+  create-full: "&eUsage: /void create <name> <fromX> <fromZ> <toX> <toZ> <fallY> <tpX> <tpY> <tpZ> [yaw] [pitch] [message]"
+  edit: "&eUsage: /void edit <region> <message|pos1|pos2|fallY|tpcoords|yaw|pitch|enabled|priority|sound|type> ..."
+  info: "&eUsage: /void info <region>"
+  remove: "&eUsage: /void remove <region>"
+
+pos1-set: "&aPos1 set to &f(%x%, %y%, %z%)"
+pos2-set: "&aPos2 set to &f(%x%, %y%, %z%)"
+pos-missing: "&cYou must set pos1 and pos2 first."
+
+region:
+  created: "&aRegion &e%region%&a created in world &e%world%&a."
+  exists: "&cA region named &e%region%&c already exists."
+  not-found: "&cNo region named &e%region%&c found."
+  removed: "&aRegion &e%region%&a removed."
+  toggled: "&aRegion &e%region%&a enabled: &e%enabled%"
+  updated: "&aUpdated &e%field%&a to &e%value%&a for &e%region%&a."
+  list-header: "&6Regions:"
+  list-item: "&7- &e%region% &7(world=&f%world%&7, enabled=&f%enabled%&7, priority=&f%priority%&7)"
+  info-header: "&6Region: &e%region%"
+  info-line1: "&7World=&f%world% &7Enabled=&f%enabled% &7Priority=&f%priority%"
+  info-line2: "&7Area X=&f%minx%..%maxx% &7Z=&f%minz%..%maxz% &7FallY=&f%fally%"
+  info-line3: "&7TP=&f%x%&7,&f%y%&7,&f%z% &7Yaw=&f%yaw% &7Pitch=&f%pitch%"
+  info-line4: "&7Message=&f%mode% &7'&f%message%&7' &7Sound=&f%sound%"
+
+bypass:
+  enabled: "&aVoid bypass enabled."
+  disabled: "&cVoid bypass disabled."
+
+teleport:
+  default: "&cYou fell into the void and were teleported!"
