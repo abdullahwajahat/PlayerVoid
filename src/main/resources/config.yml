@@ -1,1 +1,26 @@
-regions: {}
+# Global settings
+cooldown-seconds: 3
+show-particles: true
+particle-seconds: 2
+
+# Regions are grouped by world for easier organization
+regions:
+  # example:
+  # world:
+  #   spawn_catch:
+  #     enabled: true
+  #     priority: 0
+  #     pos1: { x: -10, z: -10 }
+  #     pos2: { x: 10, z: 10 }
+  #     fallY: 0
+  #     tp:
+  #       world: world
+  #       x: 0
+  #       y: 64
+  #       z: 0
+  #       yaw: 0
+  #       pitch: 0
+  #     message:
+  #       mode: chat # chat|title|actionbar
+  #       text: "&c%player%, you fell in %region%! Teleporting..."
+  #     sound: "ENTITY_ENDERMAN_TELEPORT"
