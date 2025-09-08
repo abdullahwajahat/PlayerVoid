@@ -381,14 +381,15 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
             return;
         }
         Player p = Util.asPlayer(sender);
-        if (p == null) { sender.sendMessage(msg.comp(msg.prefixed("player-only", "&cPlayers only"))); return; }
-        boolean newState = plugin.toggleBypass(p.getUniqueId(), p);
-        if (newState) {
-            p.sendMessage(msg.comp(msg.prefixed("bypass.enabled", "&aBypass enabled.")));
-        } else {
-            p.sendMessage(msg.comp(msg.prefixed("bypass.disabled", "&cBypass disabled.")));
+        if (p == null) {
+            sender.sendMessage(msg.comp(msg.prefixed("player-only", "&cPlayers only")));
+            return;
         }
+    
+        // Call the toggle method, it will handle sending the enabled/disabled message
+        plugin.toggleBypass(p.getUniqueId(), p);
     }
+
 
     // --- reload ---
     private void doReload(CommandSender sender) {
