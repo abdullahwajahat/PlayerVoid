@@ -402,29 +402,52 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
 
     // --- tab complete ---
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] a) {
-        if (a.length == 1) {
-            return Util.suggest(a[0], List.of("pos1","pos2","create","remove","list","info","toggle","edit","bypass","reload"));
-        }
-        if (a.length >= 2) {
-            String sub = a[0].toLowerCase(Locale.ROOT);
-            switch (sub) {
-                case "remove", "info", "toggle" -> {
-                    return Util.suggest(a[1], plugin.getRegions().keySet());
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] a) {
+        if (!command.getName().equalsIgnoreCase("void")) return Collections.emptyList();
+    
+        List<String> subs = Arrays.asList("create","edit","remove","list","info","toggle","pos1","pos2","bypass","reload");
+        if (a.length == 1) return Util.suggest(a[0], subs);
+    
+        String sub = a[0].toLowerCase(Locale.ROOT);
+        Map<String, VoidRegion> regions = plugin.getRegions();
+    
+        switch (sub) {
+            case "remove":
+            case "info":
+            case "toggle":
+                if (a.length == 2) return Util.suggest(a[1], regions.keySet());
+                return Collections.emptyList();
+    
+            case "edit":
+                if (a.length == 2) return Util.suggest(a[1], regions.keySet()); // region name
+                if (a.length == 3) {
+                    return Util.suggest(a[2], Arrays.asList(
+                            "message","pos1","pos2","fallY","tpcoords","yaw","pitch",
+                            "enabled","priority","sound","type"
+                    ));
                 }
-                case "edit" -> {
-                    if (a.length == 2) {
-                        return Util.suggest(a[1], plugin.getRegions().keySet());
-                    }
-                    if (a.length == 3) {
-                        return Util.suggest(a[2], List.of("message","pos1","pos2","fallY","tpcoords","yaw","pitch","enabled","priority","sound","type"));
-                    }
-                    if (a.length == 4 && a[2].equalsIgnoreCase("sound")) {
-                        return Util.suggest(a[3], Util.sounds());
-                    }
+                if (a.length == 4 && a[2].equalsIgnoreCase("sound")) {
+                    return Util.suggest(a[3], Util.sounds());
                 }
-            }
+                return Collections.emptyList();
+    
+            case "create":
+                // Provide simple positional hints for both styles
+                if (a.length == 2) return Collections.singletonList("<name>");
+                if (a.length == 3) return Collections.singletonList("<fallY or fromX>");
+                if (a.length == 4) return Collections.singletonList("<tpX or fromZ>");
+                if (a.length == 5) return Collections.singletonList("<tpY or toX>");
+                if (a.length == 6) return Collections.singletonList("<tpZ or toZ>");
+                if (a.length == 7) return Collections.singletonList("<yaw or fallY>");
+                if (a.length == 8) return Collections.singletonList("<pitch or tpX>");
+                if (a.length == 9) return Collections.singletonList("<message or tpY>");
+                return Collections.emptyList();
+    
+            default:
+                return Collections.emptyList();
         }
+    }
+
         return Collections.emptyList();
     }
 }
