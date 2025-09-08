@@ -382,7 +382,7 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
         }
         Player p = Util.asPlayer(sender);
         if (p == null) { sender.sendMessage(msg.comp(msg.prefixed("player-only", "&cPlayers only"))); return; }
-        boolean newState = plugin.toggleBypass(p.getUniqueId());
+        boolean newState = plugin.toggleBypass(p.getUniqueId(), p);
         if (newState) {
             p.sendMessage(msg.comp(msg.prefixed("bypass.enabled", "&aBypass enabled.")));
         } else {
@@ -409,10 +409,13 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
         if (a.length >= 2) {
             String sub = a[0].toLowerCase(Locale.ROOT);
             switch (sub) {
-                case "remove", "info", "toggle", "edit" -> {
+                case "remove", "info", "toggle" -> {
                     return Util.suggest(a[1], plugin.getRegions().keySet());
                 }
                 case "edit" -> {
+                    if (a.length == 2) {
+                        return Util.suggest(a[1], plugin.getRegions().keySet());
+                    }
                     if (a.length == 3) {
                         return Util.suggest(a[2], List.of("message","pos1","pos2","fallY","tpcoords","yaw","pitch","enabled","priority","sound","type"));
                     }
