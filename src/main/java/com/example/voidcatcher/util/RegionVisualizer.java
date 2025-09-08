@@ -21,12 +21,12 @@ public class RegionVisualizer {
 
         int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             for (int x = minX; x <= maxX; x += 1) {
-                w.spawnParticle(Particle.VILLAGER_HAPPY, new Location(w, x + 0.5, y, minZ + 0.5), 1, 0, 0, 0, 0);
-                w.spawnParticle(Particle.VILLAGER_HAPPY, new Location(w, x + 0.5, y, maxZ + 0.5), 1, 0, 0, 0, 0);
+                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, x + 0.5, y, minZ + 0.5), 1, 0, 0, 0, 0);
+                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, x + 0.5, y, maxZ + 0.5), 1, 0, 0, 0, 0);
             }
             for (int z = minZ; z <= maxZ; z += 1) {
-                w.spawnParticle(Particle.VILLAGER_HAPPY, new Location(w, minX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
-                w.spawnParticle(Particle.VILLAGER_HAPPY, new Location(w, maxX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
+                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, minX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
+                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, maxX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
             }
         }, 0L, 10L);
 
