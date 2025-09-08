@@ -20,13 +20,13 @@ public class RegionVisualizer {
         int y = Math.max(player.getLocation().getBlockY(), r.fallY + 2);
 
         int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            for (int x = minX; x <= maxX; x += 1) {
-                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, x + 0.5, y, minZ + 0.5), 1, 0, 0, 0, 0);
-                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, x + 0.5, y, maxZ + 0.5), 1, 0, 0, 0, 0);
+            for (int x = minX; x <= maxX; x++) {
+                w.spawnParticle(Particle.HEART, new Location(w, x + 0.5, y, minZ + 0.5), 1, 0, 0, 0, 0);
+                w.spawnParticle(Particle.HEART, new Location(w, x + 0.5, y, maxZ + 0.5), 1, 0, 0, 0, 0);
             }
-            for (int z = minZ; z <= maxZ; z += 1) {
-                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, minX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
-                w.spawnParticle(Particle.HAPPY_VILLAGER, new Location(w, maxX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
+            for (int z = minZ; z <= maxZ; z++) {
+                w.spawnParticle(Particle.HEART, new Location(w, minX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
+                w.spawnParticle(Particle.HEART, new Location(w, maxX + 0.5, y, z + 0.5), 1, 0, 0, 0, 0);
             }
         }, 0L, 10L);
 
