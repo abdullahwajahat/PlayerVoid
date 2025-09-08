@@ -1,1 +1,13 @@
+name: PlayerVoid
+main: com.example.voidcatcher.PlayerVoidPlugin
+version: 1.0.0
+api-version: 1.21
+commands:
+  voidset:
+    description: Manage void catch regions
+    usage: /voidset <create|remove|list|info> ...
+permissions:
+  playervoid.set:
+    description: Allows creating/removing regions
+    default: op
 
