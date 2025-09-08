@@ -8,11 +8,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Util {
-    public static boolean isInt(String s) { 
-        try { Integer.parseInt(s); return true; } catch (Exception e) { return false; } 
+    public static boolean isInt(String s) {
+        try { Integer.parseInt(s); return true; } catch (Exception e) { return false; }
     }
-    public static boolean isFloat(String s) { 
-        try { Float.parseFloat(s); return true; } catch (Exception e) { return false; } 
+    public static boolean isFloat(String s) {
+        try { Float.parseFloat(s); return true; } catch (Exception e) { return false; }
     }
 
     public static Player asPlayer(CommandSender sender) {
@@ -20,7 +20,7 @@ public class Util {
     }
 
     public static List<String> sounds() {
-        return Arrays.stream(Sound.values()).map(Enum::name).collect(Collectors.toList());
+        return Arrays.stream(Sound.values()).map(s -> s.name()).collect(Collectors.toList());
     }
 
     public static String joinFrom(String[] arr, int start) {
