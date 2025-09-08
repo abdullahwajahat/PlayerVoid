@@ -167,33 +167,35 @@ public final class PlayerVoidPlugin extends JavaPlugin {
     }
 
     private void checkPlayers() {
-        if (regions.isEmpty()) return;
+    if (regions.isEmpty()) return;
 
-        Collection<Player> online = Bukkit.getOnlinePlayers();
-        for (Player p : online) {
-            Location loc = p.getLocation();
-            int px = loc.getBlockX();
-            int py = loc.getBlockY();
-            int pz = loc.getBlockZ();
-            String worldName = p.getWorld().getName();
+    Collection<Player> online = new ArrayList<>(Bukkit.getOnlinePlayers());
+    for (Player p : online) {
+        Location loc = p.getLocation();
+        int px = loc.getBlockX();
+        int py = loc.getBlockY();
+        int pz = loc.getBlockZ();
+        String worldName = p.getWorld().getName();
 
-            for (VoidRegion r : regions.values()) {
-                if (!r.enabled) continue;
-                if (!r.worldName.equals(worldName)) continue;
+        for (VoidRegion r : regions.values()) {
+            if (!r.enabled) continue;
+            if (!r.worldName.equals(worldName)) continue;
 
-                if (px >= r.getMinX() && px <= r.getMaxX()
-                        && pz >= r.getMinZ() && pz <= r.getMaxZ()
-                        && py <= r.fallY) {
+            if (px >= r.getMinX() && px <= r.getMaxX()
+                    && pz >= r.getMinZ() && pz <= r.getMaxZ()
+                    && py <= r.fallY) {
 
-                    World world = Bukkit.getWorld(r.worldName);
-                    if (world == null) continue;
-                    Location tp = new Location(world, r.tpX + 0.5, r.tpY, r.tpZ + 0.5);
-                    p.teleport(tp);
-                    p.sendMessage("§cYou fell into the void and were teleported!");
-                    break;
-                }
+                World world = Bukkit.getWorld(r.worldName);
+                if (world == null) continue;
+                Location tp = new Location(world, r.tpX + 0.5, r.tpY, r.tpZ + 0.5);
+                p.teleport(tp);
+                p.sendMessage("§cYou fell into the void and were teleported!");
+                break;
             }
         }
+    }
+}
+
     }
 
     private void loadRegionsFromConfig() {
