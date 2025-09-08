@@ -281,12 +281,6 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
                     plugin.saveRegion(r);
                     sendUpdated(sender, name, "message", mode.name().toLowerCase(Locale.ROOT) + " '" + text + "'");
                 }
-                case "type" -> {
-                    if (a.length < 4) { sender.sendMessage(msg.comp(msg.color("§e/void edit " + name + " type <chat|title|actionbar>"))); return; }
-                    r.messageMode = MessageMode.valueOf(a[3].toUpperCase(Locale.ROOT));
-                    plugin.saveRegion(r);
-                    sendUpdated(sender, name, "type", r.messageMode.name().toLowerCase(Locale.ROOT));
-                }
                 case "pos1" -> {
                     Player p = Util.asPlayer(sender);
                     if (a.length == 3) {
@@ -360,23 +354,24 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
                     plugin.saveRegion(r);
                     sendUpdated(sender, name, "sound", String.valueOf(r.sound));
                 }
-                case "type" -> { /* already handled above to be thorough */ }
+                case "type" -> {
+                    if (a.length < 4) { sender.sendMessage(msg.comp(msg.color("§e/void edit " + name + " type <chat|title|actionbar>"))); return; }
+                    r.messageMode = MessageMode.valueOf(a[3].toUpperCase(Locale.ROOT));
+                    plugin.saveRegion(r);
+                    sendUpdated(sender, name, "type", r.messageMode.name().toLowerCase(Locale.ROOT));
+                }
                 default -> sender.sendMessage(msg.comp(msg.prefixed("usage.edit", "")));
             }
-        } catch (NumberFormatException ex) {
-            sender.sendMessage(Component.text("§cNumber expected."));
-        } catch (IllegalArgumentException ex) {
-            sender.sendMessage(Component.text("§cInvalid value: " + ex.getMessage()));
+        } catch (Exception ex) {
+            sender.sendMessage(msg.comp("§cInvalid args: " + ex.getMessage()));
         }
     }
 
-    private void sendUpdated(CommandSender sender, String region, String field, String value) {
-        sender.sendMessage(msg.comp(
-                msg.prefixed("region.updated", "&aUpdated %field% to %value% for %region%")
-                        .replace("%region%", region)
-                        .replace("%field%", field)
-                        .replace("%value%", value)
-        ));
+    private void sendUpdated(CommandSender sender, String name, String field, String val) {
+        sender.sendMessage(msg.comp(msg.prefixed("region.updated", "&aRegion updated")
+                .replace("%region%", name)
+                .replace("%field%", field)
+                .replace("%value%", val)));
     }
 
     // --- bypass ---
@@ -386,99 +381,47 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
             return;
         }
         Player p = Util.asPlayer(sender);
-        if (p == null) { sender.sendMessage(msg.comp(msg.prefixed("player-only", ""))); return; }
-        plugin.toggleBypass(p.getUniqueId(), p);
+        if (p == null) { sender.sendMessage(msg.comp(msg.prefixed("player-only", "&cPlayers only"))); return; }
+        boolean newState = plugin.toggleBypass(p.getUniqueId());
+        if (newState) {
+            p.sendMessage(msg.comp(msg.prefixed("bypass.enabled", "&aBypass enabled.")));
+        } else {
+            p.sendMessage(msg.comp(msg.prefixed("bypass.disabled", "&cBypass disabled.")));
+        }
     }
 
     // --- reload ---
     private void doReload(CommandSender sender) {
-        if (!(sender.hasPermission("voidmanager.reload") || sender.hasPermission("voidmanager.admin"))) {
+        if (!sender.hasPermission("voidmanager.admin")) {
             sender.sendMessage(msg.comp(msg.prefixed("no-permission", "&cNo permission.")));
             return;
         }
         plugin.reloadAll();
-        sender.sendMessage(msg.comp(msg.color("§aReloaded config and messages.")));
+        sender.sendMessage(msg.comp(msg.prefixed("reloaded", "&aReloaded config and regions.")));
     }
 
-    // ---------------- Tab Completion ----------------
+    // --- tab complete ---
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] a) {
-        if (!command.getName().equalsIgnoreCase("void")) return Collections.emptyList();
-
-        List<String> subs = Arrays.asList("create","edit","remove","list","info","toggle","pos1","pos2","bypass","reload");
-        if (a.length == 1) return Util.suggest(a[0], subs);
-
-        String sub = a[0].toLowerCase(Locale.ROOT);
-        Map<String, VoidRegion> regions = plugin.getRegions();
-        switch (sub) {
-            case "remove":
-            case "info":
-            case "toggle":
-            case "edit":
-                if (a.length == 2) return Util.suggest(a[1], regions.keySet());
-                break;
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] a) {
+        if (a.length == 1) {
+            return Util.suggest(a[0], List.of("pos1","pos2","create","remove","list","info","toggle","edit","bypass","reload"));
         }
-
-        if (sub.equals("create")) {
-            // Two styles:
-            // /void create <name> <fallY> <tpX> <tpY> <tpZ> [yaw] [pitch] [message]
-            // /void create <name> <fromX> <fromZ> <toX> <toZ> <fallY> <tpX> <tpY> <tpZ> [yaw] [pitch] [message]
-            if (a.length == 2) return Collections.singletonList("<name>");
-            if (a.length == 3) return Collections.singletonList("<fallY or fromX>");
-            if (a.length == 4) return Collections.singletonList("<tpX or fromZ>");
-            if (a.length == 5) return Collections.singletonList("<tpY or toX>");
-            if (a.length == 6) return Collections.singletonList("<tpZ or toZ>");
-            if (a.length == 7) return Collections.singletonList("<yaw or fallY>");
-            if (a.length == 8) return Collections.singletonList("<pitch or tpX>");
-            if (a.length == 9) return Collections.singletonList("<message or tpY>");
-            // can't perfectly infer branches—provide hints
-            return Collections.emptyList();
-        }
-
-        if (sub.equals("edit")) {
-            if (a.length == 3) {
-                return Util.suggest(a[2], Arrays.asList("message","pos1","pos2","fallY","tpcoords","yaw","pitch","enabled","priority","sound","type"));
-            }
-            String field = a[2].toLowerCase(Locale.ROOT);
-            switch (field) {
-                case "message":
-                    if (a.length == 4) return Util.suggest(a[3], Arrays.asList("chat","title","actionbar"));
-                    if (a.length >= 5) return Collections.singletonList("<message>");
-                    break;
-                case "type":
-                    if (a.length == 4) return Util.suggest(a[3], Arrays.asList("chat","title","actionbar"));
-                    break;
-                case "pos1":
-                case "pos2":
-                    if (a.length == 4) return Collections.singletonList("<x>");
-                    if (a.length == 5) return Collections.singletonList("<z>");
-                    break;
-                case "fally":
-                case "yaw":
-                case "pitch":
-                case "priority":
-                    if (a.length == 4) return Collections.singletonList("<value>");
-                    break;
-                case "tpcoords":
-                    if (a.length == 4) return Collections.singletonList("<x>");
-                    if (a.length == 5) return Collections.singletonList("<y>");
-                    if (a.length == 6) return Collections.singletonList("<z>");
-                    if (a.length == 7) return Collections.singletonList("[yaw]");
-                    if (a.length == 8) return Collections.singletonList("[pitch]");
-                    break;
-                case "enabled":
-                    if (a.length == 4) return Util.suggest(a[3], Arrays.asList("true","false"));
-                    break;
-                case "sound":
-                    if (a.length == 4) return Util.suggest(a[3], Util.sounds());
-                    break;
+        if (a.length >= 2) {
+            String sub = a[0].toLowerCase(Locale.ROOT);
+            switch (sub) {
+                case "remove", "info", "toggle", "edit" -> {
+                    return Util.suggest(a[1], plugin.getRegions().keySet());
+                }
+                case "edit" -> {
+                    if (a.length == 3) {
+                        return Util.suggest(a[2], List.of("message","pos1","pos2","fallY","tpcoords","yaw","pitch","enabled","priority","sound","type"));
+                    }
+                    if (a.length == 4 && a[2].equalsIgnoreCase("sound")) {
+                        return Util.suggest(a[3], Util.sounds());
+                    }
+                }
             }
         }
-
-        if (sub.equals("bypass") || sub.equals("reload") || sub.equals("pos1") || sub.equals("pos2") || sub.equals("list")) {
-            return Collections.emptyList();
-        }
-
         return Collections.emptyList();
     }
 }
