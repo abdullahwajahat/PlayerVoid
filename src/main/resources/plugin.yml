@@ -1,13 +1,44 @@
-name: PlayerVoid
-main: com.example.voidcatcher.PlayerVoidPlugin
-version: 1.0.1
+name: VoidManager
+main: com.example.voidcatcher.VoidManagerPlugin
+version: 1.1.0
 api-version: 1.21
+authors: [ "You" ]
+description: Catch void falls in configurable regions with flexible commands.
 commands:
-  voidset:
-    description: Manage void catch regions
-    usage: /voidset <create|remove|list|info|edit|rename>
-    aliases: [vset]
+  void:
+    description: Manage void regions
+    usage: /void <create|edit|remove|list|info|toggle|pos1|pos2|bypass|reload>
+    aliases: [v, vc]
 permissions:
-  playervoid.set:
-    description: Allows creating/removing/editing regions
+  voidmanager.create:
+    description: Create new regions
     default: op
+  voidmanager.remove:
+    description: Remove regions
+    default: op
+  voidmanager.edit:
+    description: Edit regions
+    default: op
+  voidmanager.list:
+    description: List regions
+    default: op
+  voidmanager.toggle:
+    description: Enable/disable regions
+    default: op
+  voidmanager.bypass:
+    description: Toggle bypass mode
+    default: op
+  voidmanager.reload:
+    description: Reload plugin configs
+    default: op
+  voidmanager.admin:
+    description: Gives access to all VoidManager permissions
+    default: op
+    children:
+      voidmanager.create: true
+      voidmanager.remove: true
+      voidmanager.edit: true
+      voidmanager.list: true
+      voidmanager.toggle: true
+      voidmanager.bypass: true
+      voidmanager.reload: true
