@@ -447,7 +447,4 @@ public class VoidCommand implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
         }
     }
-
-        return Collections.emptyList();
-    }
 }
