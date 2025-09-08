@@ -1,6 +1,5 @@
 package com.example.voidcatcher.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,15 +8,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Util {
-    public static boolean isInt(String s) { try { Integer.parseInt(s); return true; } catch (Exception e) { return false; } }
-    public static boolean isFloat(String s) { try { Float.parseFloat(s); return true; } catch (Exception e) { return false; } }
+    public static boolean isInt(String s) { 
+        try { Integer.parseInt(s); return true; } catch (Exception e) { return false; } 
+    }
+    public static boolean isFloat(String s) { 
+        try { Float.parseFloat(s); return true; } catch (Exception e) { return false; } 
+    }
 
     public static Player asPlayer(CommandSender sender) {
         return (sender instanceof Player) ? (Player) sender : null;
     }
 
     public static List<String> sounds() {
-        // FIXED: correctly stream Sound.values()
         return Arrays.stream(Sound.values()).map(Enum::name).collect(Collectors.toList());
     }
 
@@ -43,6 +45,8 @@ public class Util {
     public static <T> List<T> suggest(String prefix, Collection<T> options) {
         if (prefix == null || prefix.isEmpty()) return new ArrayList<>(options);
         String p = prefix.toLowerCase(Locale.ROOT);
-        return options.stream().filter(o -> o.toString().toLowerCase(Locale.ROOT).startsWith(p)).map(o -> o).collect(Collectors.toList());
+        return options.stream()
+                .filter(o -> o.toString().toLowerCase(Locale.ROOT).startsWith(p))
+                .collect(Collectors.toList());
     }
 }
