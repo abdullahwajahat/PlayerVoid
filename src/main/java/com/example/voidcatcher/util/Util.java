@@ -17,6 +17,7 @@ public class Util {
     }
 
     public static List<String> sounds() {
+        // FIXED: correctly stream Sound.values()
         return Arrays.stream(Sound.values()).map(Enum::name).collect(Collectors.toList());
     }
 
