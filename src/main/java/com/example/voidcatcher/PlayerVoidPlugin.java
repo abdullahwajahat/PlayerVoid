@@ -194,7 +194,7 @@ public final class PlayerVoidPlugin extends JavaPlugin {
             }
         }
     }
-}
+
 
     }
 
